@@ -93,6 +93,12 @@ input[type="checkbox"]:checked::before {
   position: absolute;
 }
 
+input[type="checkbox"]:disabled:hover {
+  border: 2px solid var(--verygrayishblue);
+  background: none;
+  cursor: auto;
+}
+
 input[type="text"] {
   height: 30px;
   font-size: 20px;
@@ -178,6 +184,11 @@ input[type="text"] {
   cursor: pointer;
 }
 
+.tools button:disabled:hover {
+  color: var(--verydarkgrayishblue);
+  cursor: auto;
+}
+
 .tools__sort button:focus {
   color: var(--brightblue);
 }
@@ -185,4 +196,29 @@ input[type="text"] {
 .tools__sort {
   display: flex;
   gap: 10px;
+}
+
+.drag {
+  color: var(--verydarkgrayishblue);
+  font-weight: bold;
+}
+
+.example {
+  color: var(--verydarkgrayishblue);
+}
+
+footer {
+  height: 50px;
+  position: absolute;
+  top: 254px;
+  color: var(--lightgrayishblue2);
+}
+
+footer a {
+  color: var(--brightblue);
+  text-decoration: none;
+}
+
+.hidden_by_sort {
+  display: none;
 }

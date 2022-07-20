@@ -17,28 +17,22 @@
       <div class="container">
         <header>Todo<img src="images/icon-sun.svg" alt="" /></header>
         <div class="todo">
-          <input type="checkbox" />
-          <input type="text" placeholder="Create a new todo..." />
+          <input type="checkbox" disabled />
+          <input id="newTodo" type="text" placeholder="Create a new todo..." />
         </div>
         <div class="list">
-          <div class="list__record">
-            <input type="checkbox" />
-            <p>Zrobić todo..</p>
-            <img src="images/icon-cross.svg" alt="" />
-          </div>
-          <div class="list__record">
-            <input type="checkbox" />
-            <p>Zrobić nowe zadania frontend..</p>
-            <img src="images/icon-cross.svg" alt="" />
+          <div class="list__record example">
+            <input type="checkbox" disabled />
+            <p>Your todo tasks will be here...</p>
           </div>
           <div class="tools">
-            <p>5 items left</p>
+            <p id="itemsLeft">0 items left</p>
             <div class="tools__sort">
               <button>All</button>
               <button>Active</button>
               <button>Completed</button>
             </div>
-            <button>Clear Completed</button>
+            <button id="clear" disabled>Clear Completed</button>
           </div>
         </div>
       </div>
@@ -46,5 +40,6 @@
     </main>
 
     <footer>Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. Coded by <a href="#">happnd</a>.</footer>
+    <script src="app.js"></script>
   </body>
 </html>
