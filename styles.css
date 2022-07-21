@@ -193,6 +193,10 @@ input[type="text"] {
   color: var(--brightblue);
 }
 
+.tools__sort__selected {
+  color: var(--brightblue) !important;
+}
+
 .tools__sort {
   display: flex;
   gap: 10px;
@@ -219,6 +223,11 @@ footer a {
   text-decoration: none;
 }
 
-.hidden_by_sort {
+.hidden_by_sort,
+.hidden {
   display: none;
+}
+
+#noRecords {
+  color: var(--verydarkgrayishblue);
 }

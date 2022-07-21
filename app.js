@@ -4,18 +4,31 @@ const tools = document.querySelector(".tools");
 const itemsCounter = document.querySelector("#itemsLeft");
 const clearBtn = document.querySelector("#clear");
 const sortBtns = document.querySelectorAll(".tools__sort button");
+const noRecordsSort = document.querySelector("#noRecords");
 let tasksCounter = 0;
 
 const config = { childList: true };
 
-const callback = function (mutationList, observer) {
+const callback = function (mutationList) {
   for (const mutation of mutationList) {
     if (mutation.type === "childList") {
-      tasksCounter = todoList.children.length - 1;
-      if (tasksCounter == 1) {
-        itemsCounter.innerText = `1 item left`;
-      } else {
+      if (mutation.addedNodes.length == 1) {
+        tasksCounter++;
         itemsCounter.innerText = `${tasksCounter} items left`;
+      }
+
+      if (mutation.removedNodes.length == 1) {
+        console.log("Usunięte");
+        console.log(mutation);
+        tasksCounter--;
+        if (tasksCounter == 1) {
+          itemsCounter.innerText = `1 item left`;
+        } else {
+          itemsCounter.innerText = `${tasksCounter} items left`;
+        }
+        if (tasksCounter < 0) {
+          itemsCounter.innerText = `0 items left`;
+        }
       }
     }
   }
@@ -31,9 +44,29 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
+todoList.addEventListener("change", (event) => {
+  if (event.target.type == "checkbox") {
+    if (event.target.checked) {
+      tasksCounter--;
+      if (tasksCounter == 1) {
+        itemsCounter.innerText = `1 item left`;
+      } else {
+        itemsCounter.innerText = `${tasksCounter} items left`;
+      }
+    } else {
+      tasksCounter++;
+      if (tasksCounter == 1) {
+        itemsCounter.innerText = `1 item left`;
+      } else {
+        itemsCounter.innerText = `${tasksCounter} items left`;
+      }
+    }
+  }
+});
+
 todoList.addEventListener("click", (event) => {
   if (event.target.tagName == "IMG" && event.target.parentNode.classList.contains("list__record")) {
-    if (todoList.children.length == 2) {
+    if (todoList.children.length == 3) {
       SetDefaultView();
     } else {
       todoList.removeChild(event.target.parentNode);
@@ -44,7 +77,7 @@ todoList.addEventListener("click", (event) => {
     const doneList = document.querySelectorAll("input[type='checkbox']");
     doneList.forEach((checkbox) => {
       if (checkbox.checked) {
-        if (todoList.children.length == 2) {
+        if (todoList.children.length == 3) {
           SetDefaultView();
         } else {
           todoList.removeChild(checkbox.parentNode);
@@ -55,8 +88,9 @@ todoList.addEventListener("click", (event) => {
 
   if (event.target.parentNode.classList.contains("tools__sort")) {
     sortBtns.forEach((btn) => {
+      btn.classList.remove("tools__sort__selected");
       if (event.target === btn) {
-        console.log(event.target.innerText);
+        btn.classList.add("tools__sort__selected");
         SortTasks(event.target.innerText);
       }
     });
@@ -64,17 +98,19 @@ todoList.addEventListener("click", (event) => {
 });
 
 function CreateNewTodoRecord() {
-  if (todoList.children[0].classList.contains("example")) {
-    todoList.children[0].classList.remove("example");
-    todoList.children[0].children[1].innerText = newTodo.value;
-    todoList.children[0].children[0].removeAttribute("disabled");
+  if (todoList.children[1].classList.contains("example")) {
+    todoList.children[1].classList.remove("example");
+    todoList.children[1].children[1].innerText = newTodo.value;
+    todoList.children[1].children[0].removeAttribute("disabled");
     const newCross = document.createElement("img");
     newCross.src = "images/icon-cross.svg";
     newCross.alt = "";
-    todoList.children[0].appendChild(newCross);
+    todoList.children[1].appendChild(newCross);
     tasksCounter = 1;
     itemsCounter.innerText = `1 item left`;
     clearBtn.removeAttribute("disabled");
+    sortBtns.forEach((btn) => btn.removeAttribute("disabled"));
+    sortBtns[0].classList.add("tools__sort__selected");
   } else {
     const newRecord = document.createElement("div");
     newRecord.classList.add("list__record");
@@ -92,20 +128,23 @@ function CreateNewTodoRecord() {
   }
 }
 
-function SetDefaultView() {
-  todoList.children[0].classList.add("example");
-  todoList.children[0].children[0].checked = false;
-  todoList.children[0].children[0].setAttribute("disabled", "true");
-  todoList.children[0].children[1].innerText = "Your todo tasks will be here...";
-  todoList.children[0].removeChild(todoList.children[0].children[2]);
+function SetDefaultView(text) {
+  todoList.children[1].classList.add("example");
+  todoList.children[1].children[0].checked = false;
+  todoList.children[1].children[0].setAttribute("disabled", "true");
+  todoList.children[1].children[1].innerText = "Your todo tasks will be here...";
+  todoList.children[1].removeChild(todoList.children[1].children[2]);
   tasksCounter = 0;
   itemsCounter.innerText = `0 items left`;
   clearBtn.setAttribute("disabled", "true");
+  sortBtns.forEach((btn) => btn.setAttribute("disabled", "true"));
+  sortBtns[0].classList.remove("tools__sort__selected");
 }
 
 function SortTasks(state) {
   const doneList = document.querySelectorAll("input[type='checkbox']");
-  console.log(todoList.childNodes);
+  noRecordsSort.classList.add("hidden");
+  let records = 0;
   if (state == "All") {
     for (let i = 0; i < todoList.children.length; i++) {
       todoList.children[i].classList.remove("hidden_by_sort");
@@ -118,17 +157,29 @@ function SortTasks(state) {
         checkbox.parentNode.classList.add("hidden_by_sort");
       } else if (!checkbox.checked && index > 0) {
         checkbox.parentNode.classList.remove("hidden_by_sort");
+        records++;
       }
     });
+
+    if (records === 1) {
+      noRecordsSort.children[1].innerText = "No active tasks...";
+      noRecordsSort.classList.remove("hidden");
+    }
   }
 
   if (state == "Completed") {
     doneList.forEach((checkbox, index) => {
-      if (!checkbox.checked && index > 0) {
+      if (!checkbox.checked && index > 1) {
         checkbox.parentNode.classList.add("hidden_by_sort");
       } else if (checkbox.checked) {
         checkbox.parentNode.classList.remove("hidden_by_sort");
+        records++;
       }
     });
+
+    if (records === 0) {
+      noRecordsSort.children[1].innerText = "No completed tasks...";
+      noRecordsSort.classList.remove("hidden");
+    }
   }
 }

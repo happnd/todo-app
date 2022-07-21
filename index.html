@@ -21,16 +21,20 @@
           <input id="newTodo" type="text" placeholder="Create a new todo..." />
         </div>
         <div class="list">
-          <div class="list__record example">
+          <div id="noRecords" class="list__record hidden">
+            <input type="checkbox" disabled />
+            <p></p>
+          </div>
+          <div class="list__record example" draggable="true">
             <input type="checkbox" disabled />
             <p>Your todo tasks will be here...</p>
           </div>
           <div class="tools">
             <p id="itemsLeft">0 items left</p>
             <div class="tools__sort">
-              <button>All</button>
-              <button>Active</button>
-              <button>Completed</button>
+              <button disabled>All</button>
+              <button disabled>Active</button>
+              <button disabled>Completed</button>
             </div>
             <button id="clear" disabled>Clear Completed</button>
           </div>
