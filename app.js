@@ -1,3 +1,4 @@
+import { SwitchStyleMode, LoadStyleMode } from "js/styleModeSwitch.js";
 const newTodo = document.querySelector("#newTodo");
 const todoList = document.querySelector(".list");
 const tools = document.querySelector(".tools");
@@ -9,7 +10,6 @@ const changeStyle = document.querySelector("#changeStyle");
 
 let tasksCounter = 0;
 let draggedElement;
-let styleChanged = false;
 
 let todoContent = [];
 const config = { childList: true };
@@ -310,36 +310,4 @@ function SaveRecordsInStorage() {
     }
   });
   localStorage.setItem("todo", JSON.stringify(todoContent));
-}
-
-function SwitchStyleMode() {
-  document.body.classList.toggle("body-white");
-  document.querySelector(".todo").classList.toggle("todo-white");
-  document.querySelector(".tools").classList.toggle("tools-white");
-  document.querySelector(".drag").classList.toggle("drag-white");
-  document.querySelector(".tools__sort").classList.toggle("tools__sort-white");
-  document.querySelectorAll(".list__record").forEach((el) => {
-    el.classList.toggle("list__record-white");
-  });
-  if (localStorage.getItem("todo-style") == "dark") {
-    changeStyle.src = "images/icon-moon.svg";
-    localStorage.setItem("todo-style", "light");
-  } else {
-    changeStyle.src = "images/icon-sun.svg";
-    localStorage.setItem("todo-style", "dark");
-  }
-}
-
-function LoadStyleMode() {
-  if (localStorage.getItem("todo-style") == "light") {
-    document.body.classList.toggle("body-white");
-    document.querySelector(".todo").classList.toggle("todo-white");
-    document.querySelector(".tools").classList.toggle("tools-white");
-    document.querySelector(".drag").classList.toggle("drag-white");
-    document.querySelector(".tools__sort").classList.toggle("tools__sort-white");
-    document.querySelectorAll(".list__record").forEach((el) => {
-      el.classList.toggle("list__record-white");
-    });
-    changeStyle.src = "images/icon-moon.svg";
-  }
 }
