@@ -1,5 +1,8 @@
 export const todoList = document.querySelector(".list");
+export const sortBtns = document.querySelectorAll(".tools__sort button");
+
 export let todoContent = [];
+export let tasksCounter = 0;
 
 export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {

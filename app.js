@@ -7,16 +7,16 @@ import {
   SetDefaultView,
   todoList,
   todoContent,
+  tasksCounter,
+  sortBtns,
 } from "./js/recordManager.js";
 const newTodo = document.querySelector("#newTodo");
 const tools = document.querySelector(".tools");
 const itemsCounter = document.querySelector("#itemsLeft");
 const clearBtn = document.querySelector("#clear");
-const sortBtns = document.querySelectorAll(".tools__sort button");
 const noRecordsSort = document.querySelector("#noRecords");
 const changeStyle = document.querySelector("#changeStyle");
 
-let tasksCounter = 0;
 let draggedElement;
 
 const config = { childList: true };
