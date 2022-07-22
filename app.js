@@ -1,4 +1,4 @@
-import { SwitchStyleMode, LoadStyleMode } from "js/styleModeSwitch.js";
+import { SwitchStyleMode, LoadStyleMode } from "./js/styleModeSwitch.js";
 const newTodo = document.querySelector("#newTodo");
 const todoList = document.querySelector(".list");
 const tools = document.querySelector(".tools");
