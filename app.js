@@ -7,29 +7,23 @@ const sortBtns = document.querySelectorAll(".tools__sort button");
 const noRecordsSort = document.querySelector("#noRecords");
 let tasksCounter = 0;
 
+let todoContent = [];
+
 const config = { childList: true };
+
+LoadRecordsFromStorage();
 
 const callback = function (mutationList) {
   for (const mutation of mutationList) {
     if (mutation.type === "childList") {
-      if (mutation.addedNodes.length == 1) {
-        tasksCounter++;
-        itemsCounter.innerText = `${tasksCounter} items left`;
-      }
-
-      if (mutation.removedNodes.length == 1) {
-        console.log("Usunięte");
-        console.log(mutation);
-        tasksCounter--;
-        if (tasksCounter == 1) {
-          itemsCounter.innerText = `1 item left`;
-        } else {
-          itemsCounter.innerText = `${tasksCounter} items left`;
-        }
-        if (tasksCounter < 0) {
-          itemsCounter.innerText = `0 items left`;
-        }
-      }
+      const recordList = document.querySelectorAll(".list__record input");
+      console.log(recordList);
+      tasksCounter = recordList.length - 1;
+      itemsCounter.innerText = `${recordList.length - 1} items left`;
+      // if (mutation.addedNodes.length == 1) {
+      //   tasksCounter++;
+      //   itemsCounter.innerText = `${tasksCounter} items left`;
+      // }
     }
   }
 };
@@ -39,15 +33,22 @@ observer.observe(todoList, config);
 
 document.addEventListener("keyup", (event) => {
   if (event.key == "Enter" && newTodo.value !== "") {
-    CreateNewTodoRecord();
+    CreateNewTodoRecord(newTodo.value, false);
     newTodo.value = "";
   }
 });
 
 todoList.addEventListener("change", (event) => {
+  console.log("test");
   if (event.target.type == "checkbox") {
     if (event.target.checked) {
       tasksCounter--;
+      todoContent.forEach((el) => {
+        if (el.text === event.target.parentNode.children[1].innerText) {
+          el.checked = true;
+          console.log(el);
+        }
+      });
       if (tasksCounter == 1) {
         itemsCounter.innerText = `1 item left`;
       } else {
@@ -55,12 +56,19 @@ todoList.addEventListener("change", (event) => {
       }
     } else {
       tasksCounter++;
+      todoContent.forEach((el) => {
+        if (el.text === event.target.parentNode.children[1].innerText) {
+          el.checked = false;
+          console.log(el);
+        }
+      });
       if (tasksCounter == 1) {
         itemsCounter.innerText = `1 item left`;
       } else {
         itemsCounter.innerText = `${tasksCounter} items left`;
       }
     }
+    localStorage.setItem("todo", JSON.stringify(todoContent));
   }
 });
 
@@ -70,6 +78,13 @@ todoList.addEventListener("click", (event) => {
       SetDefaultView();
     } else {
       todoList.removeChild(event.target.parentNode);
+      RemoveRecordFromStorage(event.target.parentNode.children[1].innerText);
+      tasksCounter--;
+      if (tasksCounter == 1) {
+        itemsCounter.innerText = `1 item left`;
+      } else {
+        itemsCounter.innerText = `${tasksCounter} items left`;
+      }
     }
   }
 
@@ -81,6 +96,7 @@ todoList.addEventListener("click", (event) => {
           SetDefaultView();
         } else {
           todoList.removeChild(checkbox.parentNode);
+          RemoveRecordFromStorage(checkbox.parentNode.children[1].innerText);
         }
       }
     });
@@ -97,10 +113,11 @@ todoList.addEventListener("click", (event) => {
   }
 });
 
-function CreateNewTodoRecord() {
+function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
     todoList.children[1].classList.remove("example");
-    todoList.children[1].children[1].innerText = newTodo.value;
+    todoList.children[1].children[1].innerText = text;
+    SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
     const newCross = document.createElement("img");
     newCross.src = "images/icon-cross.svg";
@@ -111,6 +128,9 @@ function CreateNewTodoRecord() {
     clearBtn.removeAttribute("disabled");
     sortBtns.forEach((btn) => btn.removeAttribute("disabled"));
     sortBtns[0].classList.add("tools__sort__selected");
+    if (checked === true) {
+      todoList.children[1].children[0].checked = true;
+    }
   } else {
     const newRecord = document.createElement("div");
     newRecord.classList.add("list__record");
@@ -118,13 +138,17 @@ function CreateNewTodoRecord() {
     newCheckbox.type = "checkbox";
     newRecord.appendChild(newCheckbox);
     const newTodoText = document.createElement("p");
-    newTodoText.innerText = newTodo.value;
+    newTodoText.innerText = text;
+    SaveRecordInStorage(text, checked);
     newRecord.appendChild(newTodoText);
     const newCross = document.createElement("img");
     newCross.src = "images/icon-cross.svg";
     newCross.alt = "";
     newRecord.appendChild(newCross);
     todoList.insertBefore(newRecord, tools);
+    if (checked === true) {
+      newCheckbox.checked = true;
+    }
   }
 }
 
@@ -139,6 +163,7 @@ function SetDefaultView(text) {
   clearBtn.setAttribute("disabled", "true");
   sortBtns.forEach((btn) => btn.setAttribute("disabled", "true"));
   sortBtns[0].classList.remove("tools__sort__selected");
+  localStorage.removeItem("todo");
 }
 
 function SortTasks(state) {
@@ -181,5 +206,36 @@ function SortTasks(state) {
       noRecordsSort.children[1].innerText = "No completed tasks...";
       noRecordsSort.classList.remove("hidden");
     }
+  }
+}
+
+function SaveRecordInStorage(content, checked) {
+  todoContent.push({ text: content, checked: checked });
+  localStorage.setItem("todo", JSON.stringify(todoContent));
+}
+
+function RemoveRecordFromStorage(content) {
+  console.log(content);
+  if (todoContent.length > 0) {
+    todoContent.forEach((el, index) => {
+      console.log(el, content);
+      if (el.text === content) {
+        console.log("check");
+        todoContent.splice(index, 1);
+        localStorage.setItem("todo", JSON.stringify(todoContent));
+      }
+    });
+  }
+}
+
+function LoadRecordsFromStorage() {
+  if (localStorage.getItem("todo")) {
+    const records = JSON.parse(localStorage.getItem("todo"));
+    records.forEach((el) => {
+      CreateNewTodoRecord(el.text, el.checked);
+    });
+    todoContent = records;
+    tasksCounter = todoContent.filter((el) => el.checked === false).length;
+    itemsCounter.innerText = `${tasksCounter} items left`;
   }
 }
