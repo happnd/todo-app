@@ -5,31 +5,34 @@ const itemsCounter = document.querySelector("#itemsLeft");
 const clearBtn = document.querySelector("#clear");
 const sortBtns = document.querySelectorAll(".tools__sort button");
 const noRecordsSort = document.querySelector("#noRecords");
+const changeStyle = document.querySelector("#changeStyle");
+
 let tasksCounter = 0;
+let draggedElement;
+let styleChanged = false;
 
 let todoContent = [];
-
 const config = { childList: true };
 
 LoadRecordsFromStorage();
+LoadStyleMode();
 
 const callback = function (mutationList) {
   for (const mutation of mutationList) {
     if (mutation.type === "childList") {
       const recordList = document.querySelectorAll(".list__record input");
-      console.log(recordList);
       tasksCounter = recordList.length - 1;
       itemsCounter.innerText = `${recordList.length - 1} items left`;
-      // if (mutation.addedNodes.length == 1) {
-      //   tasksCounter++;
-      //   itemsCounter.innerText = `${tasksCounter} items left`;
-      // }
     }
   }
 };
 
 const observer = new MutationObserver(callback);
 observer.observe(todoList, config);
+
+changeStyle.addEventListener("click", () => {
+  SwitchStyleMode();
+});
 
 document.addEventListener("keyup", (event) => {
   if (event.key == "Enter" && newTodo.value !== "") {
@@ -38,15 +41,72 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
+document.addEventListener("dragstart", (event) => {
+  todoList.classList.add("drag__content");
+  draggedElement = event.target;
+  setTimeout(() => event.target.classList.add("hidden"), 50);
+  event.target.classList.remove("border");
+});
+
+document.addEventListener("dragend", (event) => {
+  todoList.classList.remove("drag__content");
+  event.target.classList.remove("hidden");
+});
+
+todoList.addEventListener("dragleave", (event) => {
+  if (event.target.classList.contains("list__record")) {
+    event.target.classList.remove("drag__record__down");
+    event.target.classList.remove("drag__record__up");
+  }
+});
+
+todoList.addEventListener("dragover", (event) => {
+  event.preventDefault();
+  if (event.target.classList.contains("list__record")) {
+    if (event.offsetY < 40) {
+      event.target.classList.remove("drag__record__down");
+      event.target.classList.add("drag__record__up");
+    } else if (event.offsetY > 40) {
+      event.target.classList.remove("drag__record__up");
+      event.target.classList.add("drag__record__down");
+    }
+  } else if (event.target.parentNode.classList.contains("list__record")) {
+    if (event.offsetY < 40) {
+      event.target.parentNode.classList.remove("drag__record__down");
+      event.target.parentNode.classList.add("drag__record__up");
+    } else if (event.offsetY > 40) {
+      event.target.parentNode.classList.remove("drag__record__up");
+      event.target.parentNode.classList.add("drag__record__down");
+    }
+  }
+});
+
+todoList.addEventListener("drop", (event) => {
+  event.target.classList.remove("drag__record__down");
+  event.target.classList.remove("drag__record__up");
+  if (event.target.classList.contains("list__record")) {
+    if (event.offsetY < 40) {
+      event.target.parentNode.insertBefore(draggedElement, event.target);
+    } else if (event.offsetY > 40) {
+      event.target.parentNode.insertBefore(draggedElement, event.target.nextSibling);
+    }
+  } else if (event.target.parentNode.classList.contains("list__record")) {
+    if (event.offsetY < 40) {
+      event.target.parentNode.insertBefore(draggedElement, event.target);
+    } else if (event.offsetY > 40) {
+      event.target.parentNode.insertBefore(draggedElement, event.target.nextSibling);
+    }
+  }
+  SaveRecordsInStorage();
+});
+
 todoList.addEventListener("change", (event) => {
-  console.log("test");
   if (event.target.type == "checkbox") {
     if (event.target.checked) {
       tasksCounter--;
       todoContent.forEach((el) => {
         if (el.text === event.target.parentNode.children[1].innerText) {
           el.checked = true;
-          console.log(el);
         }
       });
       if (tasksCounter == 1) {
@@ -59,7 +119,6 @@ todoList.addEventListener("change", (event) => {
       todoContent.forEach((el) => {
         if (el.text === event.target.parentNode.children[1].innerText) {
           el.checked = false;
-          console.log(el);
         }
       });
       if (tasksCounter == 1) {
@@ -102,7 +161,7 @@ todoList.addEventListener("click", (event) => {
     });
   }
 
-  if (event.target.parentNode.classList.contains("tools__sort")) {
+  if (event.target.parentNode.classList.contains("tools__sort") || event.target.parentNode.classList.contains("mobile")) {
     sortBtns.forEach((btn) => {
       btn.classList.remove("tools__sort__selected");
       if (event.target === btn) {
@@ -128,12 +187,14 @@ function CreateNewTodoRecord(text, checked) {
     clearBtn.removeAttribute("disabled");
     sortBtns.forEach((btn) => btn.removeAttribute("disabled"));
     sortBtns[0].classList.add("tools__sort__selected");
+    sortBtns[3].classList.add("tools__sort__selected");
     if (checked === true) {
       todoList.children[1].children[0].checked = true;
     }
   } else {
     const newRecord = document.createElement("div");
     newRecord.classList.add("list__record");
+    newRecord.setAttribute("draggable", "true");
     const newCheckbox = document.createElement("input");
     newCheckbox.type = "checkbox";
     newRecord.appendChild(newCheckbox);
@@ -215,12 +276,9 @@ function SaveRecordInStorage(content, checked) {
 }
 
 function RemoveRecordFromStorage(content) {
-  console.log(content);
   if (todoContent.length > 0) {
     todoContent.forEach((el, index) => {
-      console.log(el, content);
       if (el.text === content) {
-        console.log("check");
         todoContent.splice(index, 1);
         localStorage.setItem("todo", JSON.stringify(todoContent));
       }
@@ -237,5 +295,51 @@ function LoadRecordsFromStorage() {
     todoContent = records;
     tasksCounter = todoContent.filter((el) => el.checked === false).length;
     itemsCounter.innerText = `${tasksCounter} items left`;
+  }
+}
+
+function SaveRecordsInStorage() {
+  todoContent = [];
+  const records = document.querySelectorAll(".list__record");
+  records.forEach((el, index) => {
+    if (index > 0) {
+      todoContent.push({ text: el.children[1].innerText, checked: el.children[0].checked });
+      if (index === 1) {
+        el.classList.add("border");
+      }
+    }
+  });
+  localStorage.setItem("todo", JSON.stringify(todoContent));
+}
+
+function SwitchStyleMode() {
+  document.body.classList.toggle("body-white");
+  document.querySelector(".todo").classList.toggle("todo-white");
+  document.querySelector(".tools").classList.toggle("tools-white");
+  document.querySelector(".drag").classList.toggle("drag-white");
+  document.querySelector(".tools__sort").classList.toggle("tools__sort-white");
+  document.querySelectorAll(".list__record").forEach((el) => {
+    el.classList.toggle("list__record-white");
+  });
+  if (localStorage.getItem("todo-style") == "dark") {
+    changeStyle.src = "images/icon-moon.svg";
+    localStorage.setItem("todo-style", "light");
+  } else {
+    changeStyle.src = "images/icon-sun.svg";
+    localStorage.setItem("todo-style", "dark");
+  }
+}
+
+function LoadStyleMode() {
+  if (localStorage.getItem("todo-style") == "light") {
+    document.body.classList.toggle("body-white");
+    document.querySelector(".todo").classList.toggle("todo-white");
+    document.querySelector(".tools").classList.toggle("tools-white");
+    document.querySelector(".drag").classList.toggle("drag-white");
+    document.querySelector(".tools__sort").classList.toggle("tools__sort-white");
+    document.querySelectorAll(".list__record").forEach((el) => {
+      el.classList.toggle("list__record-white");
+    });
+    changeStyle.src = "images/icon-moon.svg";
   }
 }

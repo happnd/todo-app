@@ -15,7 +15,7 @@
   <body>
     <main>
       <div class="container">
-        <header>Todo<img src="images/icon-sun.svg" alt="" /></header>
+        <header>Todo<img id="changeStyle" src="images/icon-sun.svg" alt="" /></header>
         <div class="todo">
           <input type="checkbox" disabled />
           <input id="newTodo" type="text" placeholder="Create a new todo..." />
@@ -25,7 +25,7 @@
             <input type="checkbox" disabled />
             <p></p>
           </div>
-          <div class="list__record example" draggable="true">
+          <div class="list__record example border" draggable="true">
             <input type="checkbox" disabled />
             <p>Your todo tasks will be here...</p>
           </div>
@@ -37,6 +37,11 @@
               <button disabled>Completed</button>
             </div>
             <button id="clear" disabled>Clear Completed</button>
+          </div>
+          <div class="tools__sort mobile">
+            <button disabled>All</button>
+            <button disabled>Active</button>
+            <button disabled>Completed</button>
           </div>
         </div>
       </div>
