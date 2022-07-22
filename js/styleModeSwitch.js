@@ -1,4 +1,4 @@
-function SwitchStyleMode() {
+export function SwitchStyleMode() {
   document.body.classList.toggle("body-white");
   document.querySelector(".todo").classList.toggle("todo-white");
   document.querySelector(".tools").classList.toggle("tools-white");
@@ -16,7 +16,7 @@ function SwitchStyleMode() {
   }
 }
 
-function LoadStyleMode() {
+export function LoadStyleMode() {
   if (localStorage.getItem("todo-style") == "light") {
     document.body.classList.toggle("body-white");
     document.querySelector(".todo").classList.toggle("todo-white");
@@ -29,5 +29,3 @@ function LoadStyleMode() {
     changeStyle.src = "images/icon-moon.svg";
   }
 }
-
-export default { SwitchStyleMode, LoadStyleMode };
