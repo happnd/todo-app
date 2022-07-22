@@ -13,7 +13,6 @@ import {
   clearBtn,
 } from "./js/recordManager.js";
 const newTodo = document.querySelector("#newTodo");
-const tools = document.querySelector(".tools");
 const noRecordsSort = document.querySelector("#noRecords");
 const changeStyle = document.querySelector("#changeStyle");
 

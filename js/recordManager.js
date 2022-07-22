@@ -2,6 +2,7 @@ export const todoList = document.querySelector(".list");
 export const sortBtns = document.querySelectorAll(".tools__sort button");
 export const itemsCounter = document.querySelector("#itemsLeft");
 export const clearBtn = document.querySelector("#clear");
+const tools = document.querySelector(".tools");
 
 export let todoContent = [];
 export let tasksCounter = 0;
