@@ -1,4 +1,5 @@
 export const todoList = document.querySelector(".list");
+export let todoContent = [];
 
 export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {

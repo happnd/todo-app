@@ -1,5 +1,13 @@
 import { SwitchStyleMode, LoadStyleMode } from "./js/styleModeSwitch.js";
-import { LoadRecordsFromStorage, SaveRecordsInStorage, CreateNewTodoRecord, RemoveRecordFromStorage, SetDefaultView, todoList } from "./js/recordManager.js";
+import {
+  LoadRecordsFromStorage,
+  SaveRecordsInStorage,
+  CreateNewTodoRecord,
+  RemoveRecordFromStorage,
+  SetDefaultView,
+  todoList,
+  todoContent,
+} from "./js/recordManager.js";
 const newTodo = document.querySelector("#newTodo");
 const tools = document.querySelector(".tools");
 const itemsCounter = document.querySelector("#itemsLeft");
@@ -11,7 +19,6 @@ const changeStyle = document.querySelector("#changeStyle");
 let tasksCounter = 0;
 let draggedElement;
 
-let todoContent = [];
 const config = { childList: true };
 
 LoadRecordsFromStorage();
