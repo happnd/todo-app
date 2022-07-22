@@ -9,11 +9,11 @@ import {
   todoContent,
   tasksCounter,
   sortBtns,
+  itemsCounter,
+  clearBtn,
 } from "./js/recordManager.js";
 const newTodo = document.querySelector("#newTodo");
 const tools = document.querySelector(".tools");
-const itemsCounter = document.querySelector("#itemsLeft");
-const clearBtn = document.querySelector("#clear");
 const noRecordsSort = document.querySelector("#noRecords");
 const changeStyle = document.querySelector("#changeStyle");
 
