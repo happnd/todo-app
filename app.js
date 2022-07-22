@@ -1,7 +1,6 @@
 import { SwitchStyleMode, LoadStyleMode } from "./js/styleModeSwitch.js";
-import { LoadRecordsFromStorage, SaveRecordsInStorage, CreateNewTodoRecord, RemoveRecordFromStorage, SetDefaultView } from "./js/recordManager.js";
+import { LoadRecordsFromStorage, SaveRecordsInStorage, CreateNewTodoRecord, RemoveRecordFromStorage, SetDefaultView, todoList } from "./js/recordManager.js";
 const newTodo = document.querySelector("#newTodo");
-const todoList = document.querySelector(".list");
 const tools = document.querySelector(".tools");
 const itemsCounter = document.querySelector("#itemsLeft");
 const clearBtn = document.querySelector("#clear");

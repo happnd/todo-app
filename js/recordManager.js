@@ -1,3 +1,5 @@
+export const todoList = document.querySelector(".list");
+
 export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
     todoList.children[1].classList.remove("example");
