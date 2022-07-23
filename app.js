@@ -31,8 +31,8 @@ LoadStyleMode();
 //   }
 // };
 
-const observer = new MutationObserver(callback);
-observer.observe(todoList, config);
+// const observer = new MutationObserver(callback);
+// observer.observe(todoList, config);
 
 changeStyle.addEventListener("click", () => {
   SwitchStyleMode();
