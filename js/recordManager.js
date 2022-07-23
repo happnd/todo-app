@@ -35,6 +35,7 @@ export function CreateNewTodoRecord(text, checked) {
     const newTodoText = document.createElement("p");
     newTodoText.innerText = text;
     SaveRecordInStorage(text, checked);
+    IncreaseTaskCounter();
     newRecord.appendChild(newTodoText);
     const newCross = document.createElement("img");
     newCross.src = "images/icon-cross.svg";
