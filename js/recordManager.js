@@ -10,7 +10,6 @@ export let todoContent = [];
 export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
     todoList.children[1].classList.remove("example");
-    todoList.children[1].setAttribute("draggable", "true");
     todoList.children[1].children[1].innerText = text;
     SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
@@ -28,6 +27,7 @@ export function CreateNewTodoRecord(text, checked) {
     }
   } else {
     const newRecord = document.createElement("div");
+    todoList.children[1].setAttribute("draggable", "true");
     newRecord.classList.add("list__record");
     newRecord.setAttribute("draggable", "true");
     const newCheckbox = document.createElement("input");
