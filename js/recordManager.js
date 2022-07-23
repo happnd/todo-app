@@ -18,7 +18,6 @@ export function CreateNewTodoRecord(text, checked) {
     newCross.alt = "";
     todoList.children[1].appendChild(newCross);
     IncreaseTaskCounter();
-    itemsCounter.innerText = `1 item left`;
     clearBtn.removeAttribute("disabled");
     sortBtns.forEach((btn) => btn.removeAttribute("disabled"));
     sortBtns[0].classList.add("tools__sort__selected");
@@ -55,7 +54,6 @@ export function SetDefaultView(text) {
   todoList.children[1].children[1].innerText = "Your todo tasks will be here...";
   todoList.children[1].removeChild(todoList.children[1].children[2]);
   SetTaskCounter(0);
-  itemsCounter.innerText = `0 items left`;
   clearBtn.setAttribute("disabled", "true");
   sortBtns.forEach((btn) => btn.setAttribute("disabled", "true"));
   sortBtns[0].classList.remove("tools__sort__selected");
