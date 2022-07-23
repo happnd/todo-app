@@ -1,6 +1,5 @@
 import { IncreaseTaskCounter, SetTaskCounter } from "./taskCounter.js";
-import anime from "./animejs/lib/anime.es.js";
-import Letterize from "https://cdn.skypack.dev/letterizejs@2.0.0";
+import { AnimateNewRecord } from "./animations.js";
 
 export const todoList = document.querySelector(".list");
 export const sortBtns = document.querySelectorAll(".tools__sort button");
@@ -13,20 +12,6 @@ export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
     todoList.children[1].classList.remove("example");
     todoList.children[1].children[1].innerText = text;
-    const animateText = new Letterize({
-      targets: todoList.children[1].children[1],
-    });
-    const animation = anime.timeline({
-      targets: animateText.listAll,
-      delay: anime.stagger(10, {
-        grid: [animateText.list[0].length, animateText.list.length],
-        from: "first",
-      }),
-    });
-
-    animation.add({
-      rotateY: "360deg",
-    });
     SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
     const newCross = document.createElement("img");
@@ -59,6 +44,7 @@ export function CreateNewTodoRecord(text, checked) {
     newCross.alt = "";
     newRecord.appendChild(newCross);
     todoList.insertBefore(newRecord, tools);
+    AnimateNewRecord(newRecord);
     if (checked === true) {
       newCheckbox.checked = true;
     }
