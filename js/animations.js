@@ -9,3 +9,11 @@ export function AnimateNewRecord(object) {
     top: "0px",
   });
 }
+
+export function AnimateRemoveRecord(object) {
+  anime({
+    targets: object,
+    translateX: 700,
+    opacity: 0,
+  });
+}

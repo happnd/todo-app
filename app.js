@@ -1,5 +1,6 @@
 import { SwitchStyleMode, LoadStyleMode } from "./js/styleModeSwitch.js";
 import { IncreaseTaskCounter, DecreaseTaskCounter } from "./js/taskCounter.js";
+import { AnimateRemoveRecord } from "./js/animations.js";
 import { SortTasks } from "./js/sortTasks.js";
 import {
   LoadRecordsFromStorage,
@@ -58,6 +59,7 @@ todoList.addEventListener("click", (event) => {
     if (todoList.children.length == 4) {
       SetDefaultView();
     } else {
+      AnimateRemoveRecord(event.target.parentNode);
       todoList.removeChild(event.target.parentNode);
       RemoveRecordFromStorage(event.target.parentNode.children[1].innerText);
       DecreaseTaskCounter();
@@ -72,6 +74,7 @@ todoList.addEventListener("click", (event) => {
         if (todoList.children.length == 4) {
           SetDefaultView();
         } else {
+          AnimateRemoveRecord(event.target.parentNode);
           todoList.removeChild(checkbox.parentNode);
           RemoveRecordFromStorage(checkbox.parentNode.children[1].innerText);
         }
