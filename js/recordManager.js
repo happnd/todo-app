@@ -14,8 +14,8 @@ export function CreateNewTodoRecord(text, checked) {
     todoList.children[1].children[1].innerText = text;
     anime({
       targets: todoList.children[1].children[1],
-      keyframes: [{ translateY: -20 }, { translateY: 20 }, { translateY: 0 }],
-      duration: 4000,
+      keyframes: [{ translateY: -5 }, { translateY: 5 }, { translateY: 0 }],
+      duration: 1000,
     });
     SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
