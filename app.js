@@ -12,6 +12,7 @@ import {
   sortBtns,
   clearBtn,
 } from "./js/recordManager.js";
+
 const newTodo = document.querySelector("#newTodo");
 const changeStyle = document.querySelector("#changeStyle");
 
