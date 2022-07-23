@@ -5,7 +5,7 @@ export function AnimateNewRecord(object) {
   object.style.position = "relative";
   object.style.top = "-80px";
   anime({
-    targets: test,
+    targets: object,
     top: "0px",
   });
 }
