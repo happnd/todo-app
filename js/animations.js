@@ -19,5 +19,5 @@ export function AnimateRemoveRecord(object) {
     duration: 300,
     easing: "linear",
   });
-  todoList.removeChild(event.target.parentNode);
+  todoList.removeChild(object);
 }
