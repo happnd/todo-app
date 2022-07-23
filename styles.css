@@ -170,6 +170,7 @@ input[type="text"] {
   background-color: var(--verydarkdesaturatedblue);
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   border-bottom: 1px solid var(--verydarkgrayishblue);
 }
 
