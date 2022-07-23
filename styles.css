@@ -170,7 +170,6 @@ input[type="text"] {
   background-color: var(--verydarkdesaturatedblue);
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   border-bottom: 1px solid var(--verydarkgrayishblue);
 }
 
@@ -211,6 +210,10 @@ input[type="text"] {
 .list__record p {
   margin-top: 23px;
   width: 80%;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 
 .list__record input[type="checkbox"]:checked + p {
