@@ -10,6 +10,7 @@ export let todoContent = [];
 export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
     todoList.children[1].classList.remove("example");
+    todoList.children[1].setAttribute("draggable", "true");
     todoList.children[1].children[1].innerText = text;
     SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
@@ -52,6 +53,7 @@ export function SetDefaultView() {
   todoList.children[1].classList.add("example");
   todoList.children[1].children[0].checked = false;
   todoList.children[1].children[0].setAttribute("disabled", "true");
+  todoList.children[1].removeAttribute("draggable");
   todoList.children[1].children[1].innerText = "Your todo tasks will be here...";
   todoList.children[1].removeChild(todoList.children[1].children[2]);
   SetTaskCounter(0);
