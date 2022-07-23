@@ -60,7 +60,6 @@ todoList.addEventListener("click", (event) => {
       SetDefaultView();
     } else {
       AnimateRemoveRecord(event.target.parentNode);
-      todoList.removeChild(event.target.parentNode);
       RemoveRecordFromStorage(event.target.parentNode.children[1].innerText);
       DecreaseTaskCounter();
     }
@@ -75,7 +74,6 @@ todoList.addEventListener("click", (event) => {
           SetDefaultView();
         } else {
           AnimateRemoveRecord(event.target.parentNode);
-          todoList.removeChild(checkbox.parentNode);
           RemoveRecordFromStorage(checkbox.parentNode.children[1].innerText);
         }
       }
