@@ -1,4 +1,5 @@
 import { SwitchStyleMode, LoadStyleMode } from "./js/styleModeSwitch.js";
+import { IncreaseTaskCounter, DecreaseTaskCounter, SetTaskCounter, RefreshTaskCounter } from "./js/taskCounter.js";
 import {
   LoadRecordsFromStorage,
   SaveRecordsInStorage,
@@ -7,9 +8,7 @@ import {
   SetDefaultView,
   todoList,
   todoContent,
-  tasksCounter,
   sortBtns,
-  itemsCounter,
   clearBtn,
 } from "./js/recordManager.js";
 const newTodo = document.querySelector("#newTodo");
@@ -27,8 +26,7 @@ const callback = function (mutationList) {
   for (const mutation of mutationList) {
     if (mutation.type === "childList") {
       const recordList = document.querySelectorAll(".list__record input");
-      tasksCounter = recordList.length - 1;
-      itemsCounter.innerText = `${recordList.length - 1} items left`;
+      SetTaskCounter(recordList.length - 1);
     }
   }
 };
@@ -109,29 +107,19 @@ todoList.addEventListener("drop", (event) => {
 todoList.addEventListener("change", (event) => {
   if (event.target.type == "checkbox") {
     if (event.target.checked) {
-      tasksCounter--;
+      DecreaseTaskCounter();
       todoContent.forEach((el) => {
         if (el.text === event.target.parentNode.children[1].innerText) {
           el.checked = true;
         }
       });
-      if (tasksCounter == 1) {
-        itemsCounter.innerText = `1 item left`;
-      } else {
-        itemsCounter.innerText = `${tasksCounter} items left`;
-      }
     } else {
-      tasksCounter++;
+      IncreaseTaskCounter();
       todoContent.forEach((el) => {
         if (el.text === event.target.parentNode.children[1].innerText) {
           el.checked = false;
         }
       });
-      if (tasksCounter == 1) {
-        itemsCounter.innerText = `1 item left`;
-      } else {
-        itemsCounter.innerText = `${tasksCounter} items left`;
-      }
     }
     localStorage.setItem("todo", JSON.stringify(todoContent));
   }
@@ -144,12 +132,7 @@ todoList.addEventListener("click", (event) => {
     } else {
       todoList.removeChild(event.target.parentNode);
       RemoveRecordFromStorage(event.target.parentNode.children[1].innerText);
-      tasksCounter--;
-      if (tasksCounter == 1) {
-        itemsCounter.innerText = `1 item left`;
-      } else {
-        itemsCounter.innerText = `${tasksCounter} items left`;
-      }
+      DecreaseTaskCounter();
     }
   }
 

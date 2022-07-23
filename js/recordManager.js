@@ -1,11 +1,11 @@
+import { IncreaseTaskCounter, SetTaskCounter } from "./taskCounter.js";
+
 export const todoList = document.querySelector(".list");
 export const sortBtns = document.querySelectorAll(".tools__sort button");
-export const itemsCounter = document.querySelector("#itemsLeft");
 export const clearBtn = document.querySelector("#clear");
 const tools = document.querySelector(".tools");
 
 export let todoContent = [];
-export let tasksCounter = 0;
 
 export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
@@ -17,7 +17,7 @@ export function CreateNewTodoRecord(text, checked) {
     newCross.src = "images/icon-cross.svg";
     newCross.alt = "";
     todoList.children[1].appendChild(newCross);
-    tasksCounter = 1;
+    IncreaseTaskCounter();
     itemsCounter.innerText = `1 item left`;
     clearBtn.removeAttribute("disabled");
     sortBtns.forEach((btn) => btn.removeAttribute("disabled"));
@@ -54,7 +54,7 @@ export function SetDefaultView(text) {
   todoList.children[1].children[0].setAttribute("disabled", "true");
   todoList.children[1].children[1].innerText = "Your todo tasks will be here...";
   todoList.children[1].removeChild(todoList.children[1].children[2]);
-  tasksCounter = 0;
+  SetTaskCounter(0);
   itemsCounter.innerText = `0 items left`;
   clearBtn.setAttribute("disabled", "true");
   sortBtns.forEach((btn) => btn.setAttribute("disabled", "true"));
@@ -85,8 +85,8 @@ export function LoadRecordsFromStorage() {
       CreateNewTodoRecord(el.text, el.checked);
     });
     todoContent = records;
-    tasksCounter = todoContent.filter((el) => el.checked === false).length;
-    itemsCounter.innerText = `${tasksCounter} items left`;
+    const counter = todoContent.filter((el) => el.checked === false).length;
+    SetTaskCounter(counter);
   }
 }
 
