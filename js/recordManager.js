@@ -47,7 +47,7 @@ export function CreateNewTodoRecord(text, checked) {
   }
 }
 
-export function SetDefaultView(text) {
+export function SetDefaultView() {
   todoList.children[1].classList.add("example");
   todoList.children[1].children[0].checked = false;
   todoList.children[1].children[0].setAttribute("disabled", "true");
