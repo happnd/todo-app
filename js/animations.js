@@ -11,13 +11,15 @@ export function AnimateNewRecord(object) {
   });
 }
 
-export function AnimateRemoveRecord(object) {
+export async function AnimateRemoveRecord(object) {
   anime({
     targets: object,
     translateX: 400,
     opacity: 0,
     duration: 300,
     easing: "linear",
+    complete: () => {
+      todoList.removeChild(object);
+    },
   });
-  todoList.removeChild(object);
 }
