@@ -127,7 +127,7 @@ todoList.addEventListener("change", (event) => {
 
 todoList.addEventListener("click", (event) => {
   if (event.target.tagName == "IMG" && event.target.parentNode.classList.contains("list__record")) {
-    if (todoList.children.length == 3) {
+    if (todoList.children.length == 4) {
       SetDefaultView();
     } else {
       todoList.removeChild(event.target.parentNode);
@@ -141,7 +141,7 @@ todoList.addEventListener("click", (event) => {
     const doneList = document.querySelectorAll("input[type='checkbox']");
     doneList.forEach((checkbox) => {
       if (checkbox.checked) {
-        if (todoList.children.length == 3) {
+        if (todoList.children.length == 4) {
           SetDefaultView();
         } else {
           todoList.removeChild(checkbox.parentNode);
