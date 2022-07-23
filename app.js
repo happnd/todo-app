@@ -22,14 +22,14 @@ const config = { childList: true };
 LoadRecordsFromStorage();
 LoadStyleMode();
 
-const callback = function (mutationList) {
-  for (const mutation of mutationList) {
-    if (mutation.type === "childList") {
-      const recordList = document.querySelectorAll(".list__record input");
-      SetTaskCounter(recordList.length - 1);
-    }
-  }
-};
+// const callback = function (mutationList) {
+//   for (const mutation of mutationList) {
+//     if (mutation.type === "childList") {
+//       const recordList = document.querySelectorAll(".list__record input");
+//       SetTaskCounter(recordList.length - 1);
+//     }
+//   }
+// };
 
 const observer = new MutationObserver(callback);
 observer.observe(todoList, config);
