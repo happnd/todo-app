@@ -1,4 +1,5 @@
 import { IncreaseTaskCounter, SetTaskCounter } from "./taskCounter.js";
+import anime from "./animejs/lib/anime.es.js";
 
 export const todoList = document.querySelector(".list");
 export const sortBtns = document.querySelectorAll(".tools__sort button");
@@ -11,6 +12,11 @@ export function CreateNewTodoRecord(text, checked) {
   if (todoList.children[1].classList.contains("example")) {
     todoList.children[1].classList.remove("example");
     todoList.children[1].children[1].innerText = text;
+    anime({
+      targets: todoList.children[1].children[1],
+      keyframes: [{ translateY: -20 }, { translateY: 20 }, { translateY: 0 }],
+      duration: 4000,
+    });
     SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
     const newCross = document.createElement("img");
