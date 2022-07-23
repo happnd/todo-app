@@ -128,6 +128,7 @@ todoList.addEventListener("change", (event) => {
 todoList.addEventListener("click", (event) => {
   if (event.target.tagName == "IMG" && event.target.parentNode.classList.contains("list__record")) {
     if (todoList.children.length == 3) {
+      console.log("test");
       SetDefaultView();
     } else {
       todoList.removeChild(event.target.parentNode);
