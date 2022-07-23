@@ -16,10 +16,16 @@ export function CreateNewTodoRecord(text, checked) {
     const animateText = new Letterize({
       targets: todoList.children[1].children[1],
     });
-    anime({
+    const animation = anime.timeline({
       targets: animateText.listAll,
-      keyframes: [{ translateY: -5 }, { translateY: 5 }, { translateY: 0 }],
-      duration: 1000,
+      delay: anime.stagger(10, {
+        grid: [animateText.list[0].length, animateText.list.length],
+        from: "first",
+      }),
+    });
+
+    animation.add({
+      rotateY: "360deg",
     });
     SaveRecordInStorage(text, checked);
     todoList.children[1].children[0].removeAttribute("disabled");
