@@ -30,6 +30,9 @@ export function CreateNewTodoRecord(text, checked) {
     const newRecord = document.createElement("div");
     todoList.children[1].setAttribute("draggable", "true");
     newRecord.classList.add("list__record");
+    if (localStorage.getItem("todo-style") == "light") {
+      newRecord.classList.add("list__record-white");
+    }
     newRecord.setAttribute("draggable", "true");
     const newCheckbox = document.createElement("input");
     newCheckbox.type = "checkbox";
@@ -105,4 +108,9 @@ export function SaveRecordsInStorage() {
     }
   });
   localStorage.setItem("todo", JSON.stringify(todoContent));
+}
+
+export function GetTodoListLength() {
+  let length = todoList.children.length;
+  return length;
 }

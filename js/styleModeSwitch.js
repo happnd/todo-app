@@ -4,6 +4,7 @@ export function SwitchStyleMode() {
   document.querySelector(".tools").classList.toggle("tools-white");
   document.querySelector(".drag").classList.toggle("drag-white");
   document.querySelector(".tools__sort").classList.toggle("tools__sort-white");
+  document.querySelector(".mobile").classList.toggle("mobile-white");
   document.querySelectorAll(".list__record").forEach((el) => {
     el.classList.toggle("list__record-white");
   });
@@ -23,6 +24,7 @@ export function LoadStyleMode() {
     document.querySelector(".tools").classList.toggle("tools-white");
     document.querySelector(".drag").classList.toggle("drag-white");
     document.querySelector(".tools__sort").classList.toggle("tools__sort-white");
+    document.querySelector(".mobile").classList.toggle("mobile-white");
     document.querySelectorAll(".list__record").forEach((el) => {
       el.classList.toggle("list__record-white");
     });

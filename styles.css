@@ -103,6 +103,10 @@ header img:hover {
   border: 2px solid var(--verylightgrayishblue);
 }
 
+.todo-white input[type="text"] {
+  color: var(--verydarkgrayishbluewhite);
+}
+
 input[type="checkbox"] {
   appearance: none;
   background-color: none;
@@ -175,6 +179,7 @@ input[type="text"] {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--verydarkgrayishblue);
+  cursor: pointer;
 }
 
 .list__record-white {
@@ -199,6 +204,12 @@ input[type="text"] {
 .list__record-white input[type="checkbox"]:checked {
   background: linear-gradient(330deg, hsl(280, 87%, 65%), hsl(192, 100%, 67%)) border-box;
   border: 2px solid transparent;
+}
+
+.list__record-white input[type="checkbox"]:disabled:hover {
+  border: 2px solid var(--verylightgrayishblue);
+  background: none;
+  cursor: auto;
 }
 
 .list__record img {
@@ -375,6 +386,14 @@ footer a {
     margin-top: 20px;
   }
 
+  .mobile-white {
+    background-color: var(--verylightgray);
+  }
+
+  .mobile-white button {
+    color: var(--darkgrayishbluewhite);
+  }
+
   .list div:last-child {
     border-radius: 5px;
   }
@@ -386,5 +405,9 @@ footer a {
     font-family: "Josefin Sans", sans-serif;
     color: var(--verydarkgrayishblue);
     font-size: 15px;
+  }
+
+  .mobile button:focus {
+    color: var(--brightblue);
   }
 }
