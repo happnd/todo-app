@@ -1,6 +1,6 @@
 import { SwitchStyleMode, LoadStyleMode } from "./js/styleModeSwitch.js";
 import { IncreaseTaskCounter, DecreaseTaskCounter } from "./js/taskCounter.js";
-import { AnimateRemoveRecord } from "./js/animations.js";
+import { AnimateRemoveRecord, AnimateSwitcher } from "./js/animations.js";
 import { SortTasks } from "./js/sortTasks.js";
 import {
   LoadRecordsFromStorage,
@@ -19,11 +19,12 @@ const changeStyle = document.querySelector("#changeStyle");
 
 let draggedElement;
 
-LoadRecordsFromStorage();
 LoadStyleMode();
+LoadRecordsFromStorage();
 
 changeStyle.addEventListener("click", () => {
   SwitchStyleMode();
+  AnimateSwitcher(changeStyle);
 });
 
 document.addEventListener("keyup", (event) => {
@@ -66,18 +67,22 @@ todoList.addEventListener("click", (event) => {
   }
 
   if (event.target == clearBtn) {
-    console.log("test");
-    const doneList = document.querySelectorAll("input[type='checkbox']");
-    doneList.forEach((checkbox) => {
-      if (checkbox.checked) {
-        if (todoList.children.length == 4) {
-          SetDefaultView();
-        } else {
-          AnimateRemoveRecord(event.target.parentNode);
+    const doneList = document.querySelectorAll("input[type='checkbox']:checked");
+    console.log(doneList);
+    if (doneList.length < todoList.children.length - 3) {
+      doneList.forEach((checkbox, index) => {
+        AnimateRemoveRecord(checkbox.parentNode);
+        RemoveRecordFromStorage(checkbox.parentNode.children[1].innerText);
+      });
+    } else if (doneList.length == todoList.children.length - 3) {
+      doneList.forEach((checkbox, index) => {
+        if (index > 0) {
+          AnimateRemoveRecord(checkbox.parentNode);
           RemoveRecordFromStorage(checkbox.parentNode.children[1].innerText);
         }
-      }
-    });
+      });
+      SetDefaultView();
+    }
   }
 
   if (event.target.parentNode.classList.contains("tools__sort") || event.target.parentNode.classList.contains("mobile")) {
