@@ -1,7 +1,6 @@
-import anime from "./animejs/lib/anime.es.js";
-import { todoList } from "./recordManager.js";
+import { record } from "./recordManager.js";
 
-export function AnimateNewRecord(object) {
+export function animateNewRecord(object) {
   object.style.position = "relative";
   object.style.top = "-80px";
   anime({
@@ -10,7 +9,7 @@ export function AnimateNewRecord(object) {
   });
 }
 
-export function AnimateRemoveRecord(object) {
+export function animateRemoveRecord(object) {
   object.style.zIndex = "-1";
   anime({
     targets: object,
@@ -18,12 +17,12 @@ export function AnimateRemoveRecord(object) {
     duration: 400,
     easing: "linear",
     complete: () => {
-      todoList.removeChild(object);
+      record.removeFromStorage(object);
     },
   });
 }
 
-export function AnimateSwitcher(object) {
+export function animateSwitcher(object) {
   anime({
     targets: object,
     keyframes: [{ rotate: 360 }, { rotate: 0 }],

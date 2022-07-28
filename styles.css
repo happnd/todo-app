@@ -165,10 +165,8 @@ input[type="text"] {
 
 .list {
   margin-top: 40px;
-}
-
-.border {
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .list__record {
@@ -303,7 +301,7 @@ input[type="text"] {
   color: var(--darkgrayishbluewhite);
 }
 
-.example {
+.default {
   color: var(--verydarkgrayishblue);
 }
 

@@ -18,7 +18,7 @@ export function SetTaskCounter(value) {
 }
 
 export function RefreshTaskCounter() {
-  if (tasksCounter == 1) {
+  if (tasksCounter === 1) {
     itemsCounter.innerText = `${tasksCounter} item left`;
   } else {
     itemsCounter.innerText = `${tasksCounter} items left`;

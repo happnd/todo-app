@@ -1,116 +1,145 @@
 import { IncreaseTaskCounter, SetTaskCounter } from "./taskCounter.js";
-import { AnimateNewRecord } from "./animations.js";
+import { animateNewRecord } from "./animations.js";
+import { SortTasks } from "./sortTasks.js";
 
-export const todoList = document.querySelector(".list");
-export const sortBtns = document.querySelectorAll(".tools__sort button");
-export const clearBtn = document.querySelector("#clear");
+const todoList = document.querySelector(".list");
+const sortBtns = document.querySelectorAll(".tools__sort button");
+const clearBtn = document.querySelector("#clear");
 const tools = document.querySelector(".tools");
+const defaultRecord = document.querySelector(".default");
 
-export let todoContent = [];
+const todoContent = [];
 
-export function CreateNewTodoRecord(text, checked) {
-  if (todoList.children[1].classList.contains("example")) {
-    todoList.children[1].classList.remove("example");
-    todoList.children[1].children[1].innerText = text;
+class Record {
+  constructor() {
+    this.storage = todoContent;
+    this.clearBtn = clearBtn;
+    this.todoList = todoList;
+  }
+
+  create(text, checked) {
+    defaultRecord.classList.add("hidden");
+    const newRecord = document.createElement("div");
+    newRecord.classList.add("list__record");
+    newRecord.classList.add("active");
+    newRecord.appendChild(createCheckboxElement(checked));
+    newRecord.appendChild(createTextElement(text));
+    newRecord.appendChild(createCrossElement());
+    todoList.insertBefore(newRecord, tools);
+    newRecord.setAttribute("draggable", "true");
+    animateNewRecord(newRecord);
     SaveRecordInStorage(text, checked);
-    todoList.children[1].children[0].removeAttribute("disabled");
-    const newCross = document.createElement("img");
-    newCross.src = "images/icon-cross.svg";
-    newCross.alt = "";
-    todoList.children[1].appendChild(newCross);
     IncreaseTaskCounter();
     clearBtn.removeAttribute("disabled");
     sortBtns.forEach((btn) => btn.removeAttribute("disabled"));
-    sortBtns[0].classList.add("tools__sort__selected");
-    sortBtns[3].classList.add("tools__sort__selected");
-    if (checked === true) {
-      todoList.children[1].children[0].checked = true;
-    }
-  } else {
-    const newRecord = document.createElement("div");
-    todoList.children[1].setAttribute("draggable", "true");
-    newRecord.classList.add("list__record");
+    this.setSortButton();
     if (localStorage.getItem("todo-style") == "light") {
       newRecord.classList.add("list__record-white");
     }
-    newRecord.setAttribute("draggable", "true");
-    const newCheckbox = document.createElement("input");
-    newCheckbox.type = "checkbox";
-    newRecord.appendChild(newCheckbox);
-    const newTodoText = document.createElement("p");
-    newTodoText.innerText = text;
-    SaveRecordInStorage(text, checked);
-    IncreaseTaskCounter();
-    newRecord.appendChild(newTodoText);
-    const newCross = document.createElement("img");
-    newCross.src = "images/icon-cross.svg";
-    newCross.alt = "";
-    newRecord.appendChild(newCross);
-    todoList.insertBefore(newRecord, tools);
-    AnimateNewRecord(newRecord);
-    if (checked === true) {
-      newCheckbox.checked = true;
+  }
+
+  setDefaultView() {
+    console.log("test");
+    defaultRecord.classList.remove("hidden");
+    SetTaskCounter(0);
+    clearBtn.setAttribute("disabled", "true");
+    sortBtns.forEach((btn) => btn.setAttribute("disabled", "true"));
+    sortBtns[0].classList.remove("tools__sort__selected");
+    localStorage.removeItem("todo");
+  }
+
+  removeFromStorage(object) {
+    const id = this.getID(object);
+    console.log(id);
+    todoList.removeChild(object);
+    if (this.storage.length > 0) {
+      this.storage.forEach((todo, index) => {
+        if (index === id) {
+          this.storage.splice(index, 1);
+          localStorage.setItem("todo", JSON.stringify(this.storage));
+        }
+      });
+      console.log(this.getActiveRecords().length);
+      if (this.getActiveRecords().length === 0) {
+        this.setDefaultView();
+      }
     }
+  }
+
+  loadFromStorage() {
+    if (localStorage.getItem("todo")) {
+      defaultRecord.classList.add("hidden");
+      const records = JSON.parse(localStorage.getItem("todo"));
+      records.forEach((el) => {
+        this.create(el.text, el.checked);
+      });
+      this.storage = records;
+      const counter = this.storage.filter((el) => el.checked === false).length;
+      SetTaskCounter(counter);
+    }
+  }
+
+  saveInStorage() {
+    this.storage = [];
+    const activeRecords = document.querySelectorAll(".active");
+    activeRecords.forEach((record) => this.storage.push({ text: record.children[1].innerText, checked: record.children[0].checked }));
+    localStorage.setItem("todo", JSON.stringify(this.storage));
+  }
+
+  setSortButton(object) {
+    if (object) {
+      sortBtns.forEach((btn) => {
+        btn.classList.remove("tools__sort__selected");
+        if (object === btn) {
+          btn.classList.add("tools__sort__selected");
+          SortTasks(object.innerText);
+        }
+      });
+    } else {
+      sortBtns[0].classList.add("tools__sort__selected");
+    }
+  }
+
+  getActiveRecords() {
+    const activeRecords = document.querySelectorAll(".active");
+    return activeRecords;
+  }
+
+  getID(recordObject) {
+    const activeRecords = document.querySelectorAll(".active");
+    let id;
+    activeRecords.forEach((record, index) => {
+      if (record === recordObject) {
+        id = index;
+      }
+    });
+    return id;
   }
 }
 
-export function SetDefaultView() {
-  todoList.children[1].classList.add("example");
-  todoList.children[1].children[0].checked = false;
-  todoList.children[1].children[0].setAttribute("disabled", "true");
-  todoList.children[1].removeAttribute("draggable");
-  todoList.children[1].children[1].innerText = "Your todo tasks will be here...";
-  todoList.children[1].removeChild(todoList.children[1].children[2]);
-  SetTaskCounter(0);
-  clearBtn.setAttribute("disabled", "true");
-  sortBtns.forEach((btn) => btn.setAttribute("disabled", "true"));
-  sortBtns[0].classList.remove("tools__sort__selected");
-  localStorage.removeItem("todo");
+function createCheckboxElement(checked) {
+  const newCheckbox = document.createElement("input");
+  newCheckbox.type = "checkbox";
+  newCheckbox.checked = checked;
+  return newCheckbox;
+}
+
+function createTextElement(text) {
+  const newTodoText = document.createElement("p");
+  newTodoText.innerText = text;
+  return newTodoText;
+}
+
+function createCrossElement() {
+  const newCross = document.createElement("img");
+  newCross.src = "images/icon-cross.svg";
+  newCross.alt = "";
+  return newCross;
 }
 
 function SaveRecordInStorage(content, checked) {
-  todoContent.push({ text: content, checked: checked });
-  localStorage.setItem("todo", JSON.stringify(todoContent));
+  record.storage.push({ text: content, checked: checked });
+  localStorage.setItem("todo", JSON.stringify(record.storage));
 }
 
-export function RemoveRecordFromStorage(content) {
-  if (todoContent.length > 0) {
-    todoContent.forEach((el, index) => {
-      if (el.text === content) {
-        todoContent.splice(index, 1);
-        localStorage.setItem("todo", JSON.stringify(todoContent));
-      }
-    });
-  }
-}
-
-export function LoadRecordsFromStorage() {
-  if (localStorage.getItem("todo")) {
-    const records = JSON.parse(localStorage.getItem("todo"));
-    records.forEach((el) => {
-      CreateNewTodoRecord(el.text, el.checked);
-    });
-    todoContent = records;
-    const counter = todoContent.filter((el) => el.checked === false).length;
-    SetTaskCounter(counter);
-  }
-}
-
-export function SaveRecordsInStorage() {
-  todoContent = [];
-  const records = document.querySelectorAll(".list__record");
-  records.forEach((el, index) => {
-    if (index > 0) {
-      todoContent.push({ text: el.children[1].innerText, checked: el.children[0].checked });
-      if (index === 1) {
-        el.classList.add("border");
-      }
-    }
-  });
-  localStorage.setItem("todo", JSON.stringify(todoContent));
-}
-
-export function GetTodoListLength() {
-  let length = todoList.children.length;
-  return length;
-}
+export const record = new Record();

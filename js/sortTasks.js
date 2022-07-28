@@ -1,45 +1,44 @@
-import { todoList } from "./recordManager.js";
-const noRecordsSort = document.querySelector("#noRecords");
+import { record } from "./recordManager.js";
+const noRecordsSort = document.querySelector("#noRecords p");
+let doneList;
+let records;
 
 export function SortTasks(state) {
-  const doneList = document.querySelectorAll("input[type='checkbox']");
-  noRecordsSort.classList.add("hidden");
-  let records = 0;
-  if (state == "All") {
-    for (let i = 0; i < todoList.children.length; i++) {
-      todoList.children[i].classList.remove("hidden_by_sort");
-    }
+  doneList = document.querySelectorAll("input[type='checkbox']:not([disabled])");
+  doneList.forEach((done) => done.parentNode.classList.remove("hidden_by_sort"));
+  noRecordsSort.parentNode.classList.add("hidden");
+  records = 0;
+
+  switch (state) {
+    case "All":
+      Array.from(record.todoList.children).forEach((todo) => todo.classList.remove("hidden_by_sort"));
+      break;
+
+    case "Active":
+      checkStateOfCheckbox(false);
+      showNoRecordsInfo("No active tasks...");
+      break;
+
+    case "Completed":
+      checkStateOfCheckbox(true);
+      showNoRecordsInfo("No completed tasks...");
+      break;
   }
+}
 
-  if (state == "Active") {
-    doneList.forEach((checkbox, index) => {
-      if (checkbox.checked) {
-        checkbox.parentNode.classList.add("hidden_by_sort");
-      } else if (!checkbox.checked && index > 0) {
-        checkbox.parentNode.classList.remove("hidden_by_sort");
-        records++;
-      }
-    });
-
-    if (records === 1) {
-      noRecordsSort.children[1].innerText = "No active tasks...";
-      noRecordsSort.classList.remove("hidden");
-    }
+function showNoRecordsInfo(text) {
+  if (records === 0) {
+    noRecordsSort.innerText = text;
+    noRecordsSort.parentNode.classList.remove("hidden");
   }
+}
 
-  if (state == "Completed") {
-    doneList.forEach((checkbox, index) => {
-      if (!checkbox.checked && index > 1) {
-        checkbox.parentNode.classList.add("hidden_by_sort");
-      } else if (checkbox.checked) {
-        checkbox.parentNode.classList.remove("hidden_by_sort");
-        records++;
-      }
-    });
-
-    if (records === 0) {
-      noRecordsSort.children[1].innerText = "No completed tasks...";
-      noRecordsSort.classList.remove("hidden");
+function checkStateOfCheckbox(checked) {
+  doneList.forEach((checkbox) => {
+    if (checkbox.checked === checked) {
+      records++;
+    } else {
+      checkbox.parentNode.classList.add("hidden_by_sort");
     }
-  }
+  });
 }

@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="styles.css" />
 
     <title>Frontend Mentor | Todo app</title>
+    <script async src="./js/anime.min.js"></script>
+    <script defer src="app.js" type="module"></script>
   </head>
   <body>
     <main>
@@ -23,9 +25,9 @@
         <div class="list">
           <div id="noRecords" class="list__record hidden">
             <input type="checkbox" disabled />
-            <p></p>
+            <p>No active tasks...</p>
           </div>
-          <div class="list__record example border">
+          <div class="list__record default">
             <input type="checkbox" disabled />
             <p>Your todo tasks will be here...</p>
           </div>
@@ -49,6 +51,5 @@
     </main>
 
     <footer>Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. Coded by <a href="#">happnd</a>.</footer>
-    <script src="app.js" type="module"></script>
   </body>
 </html>
