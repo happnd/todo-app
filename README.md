@@ -1,4 +1,4 @@
-# Frontend Mentor - Todo app solution
+# Todo app solution
 
 This is a solution to the [Todo app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
@@ -9,7 +9,6 @@ This is a solution to the [Todo app challenge on Frontend Mentor](https://www.fr
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
-- [Author](#author)
 
 **Note: Delete this note and update the table of contents based on what sections you keep.**
 
@@ -41,7 +40,3 @@ Users should be able to:
 - Flexbox
 - Mobile-first workflow
 - [AnimeJS](https://animejs.com/) - JS library
-
-## Author
-
-- Frontend Mentor - [@happnd](https://www.frontendmentor.io/profile/happnd)
